@@ -21,6 +21,7 @@ import android.widget.Toast;
 import tech.torque.cinephilia.Model.Movie;
 import tech.torque.cinephilia.MoviesApi.API;
 import tech.torque.cinephilia.R;
+
 import com.squareup.picasso.Picasso;
 
 public class MovieDetailsActivity extends AppCompatActivity {

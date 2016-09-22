@@ -1,5 +1,7 @@
 package tech.torque.cinephilia.MoviesApi;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.widget.Toast;
@@ -24,6 +26,22 @@ import java.util.Locale;
 
 public class FetchMoviesTask extends AsyncTask<Void, Void, String> {
 
+    ProgressDialog progDialog;
+    private Context mContext;
+
+    public FetchMoviesTask(Context context) {
+        this.mContext = context;
+    }
+
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        progDialog = new ProgressDialog(this.mContext);
+        progDialog.setMessage("Fetching Data...");
+        progDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progDialog.show();
+    }
+
     @Override
     protected String doInBackground(Void... params) {
 
@@ -45,10 +63,9 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, String> {
 
         String response;
         try {
-            response  = getJSON(builtUri);
-
+            response = getJSON(builtUri);
             return response;
-        }catch (Exception e){
+        } catch (Exception e) {
             MainActivity.toast.setText("Connection Error");
             MainActivity.toast.setDuration(Toast.LENGTH_SHORT);
             MainActivity.toast.show();
@@ -58,11 +75,14 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, String> {
 
     }
 
+
     @Override
     protected void onPostExecute(String response) {
         if (response != null) {
             loadInfo(response);
+            progDialog.dismiss();
         } else {
+            progDialog.dismiss();
             MainActivity.toast.setText("No Internet Connection");
             MainActivity.toast.setDuration(Toast.LENGTH_SHORT);
             MainActivity.toast.show();
@@ -71,7 +91,7 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, String> {
     }
 
 
-    public  static void loadInfo (String jsonString) {
+    public static void loadInfo(String jsonString) {
         MainActivity.images.clear();
         MainActivity.moviesList.clear();
 
@@ -85,7 +105,7 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, String> {
 
                     JSONObject movie = moviesArray.getJSONObject(i);
                     Movie movieItem = new Movie();
-                    String Id=movie.getString("id");
+                    String Id = movie.getString("id");
                     movieItem.setId(Id);
                     movieItem.setOriginal_title(movie.getString("original_title"));
                     if (movie.getString("overview") == "null") {
@@ -121,8 +141,7 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, String> {
         }
     }
 
-    public static String getJSON(Uri builtUri)
-    {
+    public static String getJSON(Uri builtUri) {
         InputStream inputStream;
         StringBuffer buffer;
         HttpURLConnection urlConnection = null;

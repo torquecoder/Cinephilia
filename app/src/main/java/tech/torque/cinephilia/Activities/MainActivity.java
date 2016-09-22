@@ -101,7 +101,9 @@ public class MainActivity extends AppCompatActivity {
 
 
         public void updateMovies() {
-            new FetchMoviesTask().execute();
+
+            FetchMoviesTask task = new FetchMoviesTask(getActivity());
+            task.execute();
         }
 
 

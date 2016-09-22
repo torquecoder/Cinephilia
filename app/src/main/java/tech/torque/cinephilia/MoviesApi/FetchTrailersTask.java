@@ -20,7 +20,8 @@ public class FetchTrailersTask extends AsyncTask<String, Void, String> {
 
     int index;
     String Id;
-    FetchTrailersTask(int index,String Id) {
+
+    FetchTrailersTask(int index, String Id) {
 
         this.index = index;
         this.Id = Id;
@@ -38,10 +39,10 @@ public class FetchTrailersTask extends AsyncTask<String, Void, String> {
 
         String trailer_response;
         try {
-            trailer_response  = getJSON(trailerUri);
+            trailer_response = getJSON(trailerUri);
             return trailer_response;
 
-        }catch (Exception e){
+        } catch (Exception e) {
             return null;
         }
 
@@ -51,11 +52,11 @@ public class FetchTrailersTask extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String response) {
         try {
-            if(response != null) {
+            if (response != null) {
 
                 JSONObject trailersObject = new JSONObject(response);
                 JSONArray trailersArray = trailersObject.getJSONArray("results");
-                String trailer_path="", trailer_name="";
+                String trailer_path = "", trailer_name = "";
 
                 for (int i = 0; i < trailersArray.length(); i++) {
 
@@ -71,15 +72,14 @@ public class FetchTrailersTask extends AsyncTask<String, Void, String> {
                 MainActivity.moviesList.get(index).setTrailer_name(trailer_name);
             }
 
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
 
     }
 
-    public static String getJSON(Uri builtUri)
-    {
+    public static String getJSON(Uri builtUri) {
         InputStream inputStream;
         StringBuffer buffer;
         HttpURLConnection urlConnection = null;
